@@ -2,20 +2,231 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora de Fatorial - Atividade #2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Algoritmos</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        input, button { padding: 8px; margin: 5px; font-size: 16px; }
-        #resultado { font-weight: bold; margin-top: 15px; color: green; }
+        :root {
+            --bg-body: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #3b82f6;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* Seletor do Backend */
+        .backend-selector {
+            display: flex;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .backend-option {
+            flex: 1;
+            text-align: center;
+        }
+
+        .backend-option input[type="radio"] {
+            display: none;
+        }
+
+        .backend-option label {
+            display: block;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: var(--text-muted);
+        }
+
+        .backend-option input[type="radio"]:checked + label {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Botões das 6 Opções */
+        .alg-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .alg-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 6px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .alg-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .alg-btn.active {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        /* Formulário */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+
+        /* Caixa de Resultado */
+        .result-box {
+            margin-top: 20px;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.95rem;
+            color: #38bdf8;
+            min-height: 40px;
+            word-break: break-all;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h2>Calculadora de Fatorial</h2>
-    <label for="numeroInput">Digite um número:</label>
-    <input type="number" id="numeroInput" value="5">
-    <button onclick="executarAlgoritmo()">Calcular</button>
 
-    <div id="resultado"></div>
+    <div class="container">
+        <h1>Painel de Algoritmos</h1>
+
+        <!-- Seletor de Backend -->
+        <div class="section-title">Backend de Execução:</div>
+        <div class="backend-selector">
+            <div class="backend-option">
+                <input type="radio" id="bg-js" name="backend" value="js" checked>
+                <label for="bg-js">JavaScript (Node.js)</label>
+            </div>
+            <div class="backend-option">
+                <input type="radio" id="bg-java" name="backend" value="java">
+                <label for="bg-java">Java</label>
+            </div>
+        </div>
+
+        <!-- Botões dos 6 Algoritmos -->
+        <div class="section-title">Algoritmo:</div>
+        <div class="alg-grid">
+            <button class="alg-btn active" onclick="selecionarAlgoritmo('primo', this)">1. Número Primo</button>
+            <button class="alg-btn" onclick="selecionarAlgoritmo('somatorio', this)">2. Somatório</button>
+            <button class="alg-btn" onclick="selecionarAlgoritmo('fibonacci', this)">3. Fibonacci</button>
+            <button class="alg-btn" onclick="selecionarAlgoritmo('mdc', this)">4. MDC</button>
+            <button class="alg-btn" onclick="selecionarAlgoritmo('quicksort', this)">5. Quicksort</button>
+            <button class="alg-btn" onclick="selecionarAlgoritmo('contagem', this)">6. Contagem</button>
+        </div>
+
+        <!-- Campos de Entrada Dinâmicos -->
+        <div id="form-container">
+            <div class="form-group" id="group-val1">
+                <label id="label-val1" for="input-val1">Digite o número inteiro:</label>
+                <input type="text" id="input-val1" placeholder="Ex: 17">
+            </div>
+
+            <div class="form-group hidden" id="group-val2">
+                <label id="label-val2" for="input-val2">Digite o segundo número:</label>
+                <input type="number" id="input-val2" placeholder="Ex: 36">
+            </div>
+        </div>
+
+        <button class="btn-submit" onclick="executarBackend()">Executar no Backend</button>
+
+        <!-- Resultado -->
+        <div class="result-box" id="output-result">
+            Aguardando execução...
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
